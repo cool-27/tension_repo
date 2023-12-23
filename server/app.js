@@ -7,10 +7,21 @@ const app = express();
 const PORT = process.env.PORT || 5000
 const User = require("./model/userSchema")
  const DB = 'mongodb+srv://tannu:1234@cluster0.k7ybicw.mongodb.net/tul?retryWrites=true&w=majority'
-// const DB ='mongodb+srv://tannu:1234@cluster0.c2mmrbl.mongodb.net/pri?retryWrites=true&w=majority'
+
+
+const path = require('path')
+
+
 mongoose.connect(DB).then(() => {
     console.log("connection successful")
 }).catch((err) => console.log("no connection"));
+
+
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+  });
+  
 app.use(express.json());
 
 app.post('/register', async (req, res) =>{
